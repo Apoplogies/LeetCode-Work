@@ -1,0 +1,45 @@
+import java.util.HashMap;
+class ValidAnagram {
+    public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+
+        HashMap s_hash = new HashMap<Character, Integer>();
+        for (int i = 0; i < s.length(); i++) {
+            char temp = s.charAt(i);
+            Integer value = 1;
+            if (s_hash.get(temp) != null) {
+                value = (Integer) s_hash.get(temp) + 1;
+            }
+            s_hash.put(s.charAt(i), value);
+        }
+        
+        for (int i = 0; i < t.length(); i++) {
+            Object tem = s_hash.get(t.charAt(i));
+
+            if (tem == null) {
+                return false;
+            }
+
+            Integer temp = (Integer) tem;
+            temp--;
+            
+            if (temp == null) {
+                return false;
+            }
+            
+            else if (temp < 0) {
+                return false;
+            }
+            
+            else {
+                s_hash.put(t.charAt(i), temp);
+            }
+        }
+
+
+        return true;
+    }
+}
