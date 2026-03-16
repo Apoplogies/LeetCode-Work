@@ -1,0 +1,21 @@
+import java.util.HashMap;
+class Solution {
+    public int[] twoSum(int[] nums, int target) {
+            int[] solution = new int[2];
+            HashMap<Integer, Integer> num_key = new HashMap<Integer, Integer>();
+            for (int i = 0; i < nums.length; i++) {
+                num_key.put(nums[i], i);
+            }
+
+            for (int i = 0; i < nums.length; i++) {
+                int sol_number = target - nums[i];
+                if (num_key.get(sol_number) != null && num_key.get(sol_number) != i) {
+                    solution[0] = i;
+                    solution[1] = num_key.get(sol_number);
+                    break;
+                }
+            }
+
+            return solution;
+        }
+}
