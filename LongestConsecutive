@@ -1,0 +1,50 @@
+import java.util.HashSet;
+import java.util.HashMap;
+class Solution {
+    public int longestConsecutive(int[] nums) {
+        //The hashset will record whether or not an integer exists in the array, but lets
+        //us check in O(1) time Inshaallah
+
+        if (nums.length == 0) {
+            return 0;
+        }
+
+
+        HashSet<Integer> num_record = new HashSet<>();
+        HashMap<Integer, Integer> used_nums = new HashMap<>();
+        int max_consecutive = 1;
+
+        //First loop loads the hashset, takes n iterations
+        for (int i = 0; i < nums.length; i++) {
+            num_record.add(nums[i]);
+        }
+
+        for (int i = 0; i < nums.length; i++) {
+            int temp = consecutiveFinder(nums[i], num_record, used_nums);
+            if (temp > max_consecutive) {
+                max_consecutive = temp;
+            }
+        }
+
+        return max_consecutive;
+
+
+
+    }
+
+    public int consecutiveFinder(int start, HashSet<Integer> num_access, HashMap<Integer, Integer> record) {
+        if (num_access.contains(start) == false) {
+            return 0;
+        }
+        
+        if (record.get(start) != null) {
+            return record.get(start);
+        }
+        else {
+            int answer = (consecutiveFinder(start + 1, num_access, record) + 1);
+            record.put(start, answer);
+            return answer;
+        }
+
+    }
+}
