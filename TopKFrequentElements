@@ -1,0 +1,79 @@
+import java.util.*;
+import java.util.stream.Stream;
+
+class Solution {
+    int limit;
+    int[] initial_array;
+    int[] ans;
+    int track = 0;
+    long t_length = 0;
+    HashMap<Integer, LinkedList<Integer>> ans_2 = new HashMap<>();
+    public int[] topKFrequent(int[] nums, int k) {
+        //First, we hashmap each number we find with the number of times it shows up
+        //So, the hashmap for Key : 1 is V: #of times 1 is in the array
+        //we do this by traversing the array and updating the hashmap key value pair everytime a new matching num is found
+        //Then, we take a look at each unique num, and find the highest get() values & place in order in an array
+        //Return first k elements of the array
+        limit = k;
+        initial_array = nums;
+        ans = new int[k];
+
+        //initialise data structures
+        HashMap<Integer, Integer> ans_key = new HashMap<>();
+        HashMap<Integer, LinkedList<Integer>> ans_key_2 = new HashMap<>();
+        ans_2 = ans_key_2;
+
+
+        int tracker = 0;
+        //main for loop (sets up hashmap). Key = number, value = frequency
+        for (int i = 0; i < nums.length; i++) {
+            if (ans_key.get(nums[i]) == null) {
+                ans_key.put(nums[i], 1);
+                tracker++;
+                continue;
+            }
+
+            int x = ans_key.get(nums[i]);
+            ans_key.put(nums[i], x + 1);
+        }
+        // inverse hashmap setup
+        // Key == frequency, value = linked list of numbers with matching frequency
+        //bc there could be many keys with same frequency, i use a linked list. not ideal but ehh whatever, worstcase traversal is O(N) time and
+        //you would only need to traverse it if i already know i need to get all the keys from there
+        for (Integer key : ans_key.keySet()) {
+            int temp_value = ans_key.get(key);
+            if (ans_key_2.get(temp_value) == null) {
+                ans_key_2.put(temp_value, new LinkedList<Integer>());
+                ans_key_2.get(temp_value).add(key);
+
+            } else {
+                ans_key_2.get(temp_value).add(key);
+
+            }
+        }
+
+        t_length = ans_key.size();
+        Stream<Integer> to_sort = ans_key.values().stream().sorted();
+
+
+        to_sort.forEach(this::process);
+
+        //Now take the k highest elements and return the corresponding keys
+
+        return ans;
+
+    }
+
+    public void process(Integer y) {
+        if ((t_length - track) <= limit) {
+            System.out.println(y);
+            ans[(int) t_length - track - 1] = ans_2.get(y).getFirst();
+            ans_2.get(y).removeFirst();
+        }
+
+        track++;
+    }
+
+    
+}
+
