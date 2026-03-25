@@ -1,0 +1,62 @@
+import java.util.HashMap;
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        //First, check for the edge case of a string of length 0
+        //Similarly, initialise the answer variable (int max) to 1, since that
+        //is the minimum possible answer (a unique char), outside of the above mentioned edge case
+        if (s.length() == 0) {return 0;}
+        int max = 1;
+
+        //This solution uses two pointers for a sliding window.
+        //The window slides across by extending pointer two and adding 
+        //letters to a hashmap with their index (letter = key, value = index)
+        //When a repeated letter is found, the left pointer skips to the letter just ahead of the first instance of the repeated letter (and that letter)
+        //e.g, in abbac, once the right pointer reaches the second 'a', the left pointer jumps to the first 'b'
+        //All the while, the 'max' ptr difference is recorded, ultimately allowing us to find the max size
+        int ptr_1 = 0;
+        int ptr_2 = 0;
+
+        //The HashMap stores the key:value pair of letter:index
+        HashMap<Character, Integer> m = new HashMap<Character, Integer>();
+        m.put(s.charAt(ptr_1), 0);
+
+        //Because ptr_2 increments at the beginning of the loop
+        //To ensure we only traverse to the end of the array, the last iteration of the loop
+        //is at s.length() - 2, since we reach s.length() - 1 on the last iteration
+        while (ptr_2 < s.length() - 1) {
+            
+            ptr_2++;
+            char n_char = s.charAt(ptr_2);
+
+            //Checks if the new character found at ptr_2's location is in the hashmap
+            //Also, if the character is found early enough that it does not matter, it is ignored
+            //(e.g, tmmxatt), when the final t is found, the left pointer is already beyond the first t
+            //so it does not need to be updated
+
+            Integer temp = m.get(n_char);
+            
+            if (temp == null || temp < ptr_1) {
+                m.put(n_char, ptr_2);
+
+                if (ptr_2 - ptr_1 + 1 > max) {
+                    
+                    max = (1 + ptr_2 - ptr_1);
+                }
+
+                if (temp != null) {m.replace(n_char, ptr_2);}
+            }
+            //if a repeat character is found, that character's index in the hashmap is updated
+            //and the pointer is updated to the left of its position
+            else {
+                m.replace(n_char, ptr_2);
+                ptr_1 = temp + 1;
+            }
+            
+        }
+
+
+        return max;
+    }
+    
+    
+}
