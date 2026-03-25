@@ -1,0 +1,78 @@
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.ArrayList;
+class Solution {
+    public List<List<String>> groupAnagrams(String[] strs) {
+        HashSet<Integer> used_indices = new HashSet<Integer>();
+        List<List<String>> ans_key = new ArrayList<>();
+        for (int i = 0; i < strs.length; i++) {
+            if (used_indices.contains(i)) {
+                continue;
+            }
+            //Initialise answer key for all anagrmas of this word
+            ArrayList<String> temp_ans = new ArrayList<String>();
+
+            temp_ans.addLast(strs[i]);
+            used_indices.add(i);
+            for (int j = i + 1; j < strs.length; j++) {
+
+                if (used_indices.contains(j)) {
+                    continue;
+                }
+
+                
+                if (isAnagram(strs[i], strs[j])) {
+                    temp_ans.addLast(strs[j]);
+                    used_indices.add(j);
+                }
+            }
+
+            ans_key.add(temp_ans);
+        }
+
+        return ans_key;
+    }
+
+     public boolean isAnagram(String s, String t) {
+        if (s.length() != t.length()) {
+            return false;
+        }
+
+
+        HashMap s_hash = new HashMap<Character, Integer>();
+        for (int i = 0; i < s.length(); i++) {
+            char temp = s.charAt(i);
+            Integer value = 1;
+            if (s_hash.get(temp) != null) {
+                value = (Integer) s_hash.get(temp) + 1;
+            }
+            s_hash.put(s.charAt(i), value);
+        }
+        
+        for (int i = 0; i < t.length(); i++) {
+            Object tem = s_hash.get(t.charAt(i));
+
+            if (tem == null) {
+                return false;
+            }
+
+            Integer temp = (Integer) tem;
+            temp--;
+            
+            if (temp == null) {
+                return false;
+            }
+            
+            else if (temp < 0) {
+                return false;
+            }
+            
+            else {
+                s_hash.put(t.charAt(i), temp);
+            }
+        }
+
+        String[][] answer = new String[5][5];
+        return true;
+    }
+}

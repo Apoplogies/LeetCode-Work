@@ -1,0 +1,45 @@
+import java.util.HashSet;
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        //First, check for the edge case of a string of length 0
+        //Similarly, initialise the answer variable (int max) to 1, since that
+        //is the minimum possible answer (a unique char), outside of the above mentioned edge case
+        if (s.length() == 0) {return 0;}
+        int max = 1;
+        
+        //The for loop traverses the array and searches for the length of the longest subtring
+        //starting at each index. This causes quite a bit of redundancy though
+        //If a new max substring length is found, it is set as the new max
+        for (int i = 0; i < s.length(); i++) {
+            int new_max = lengthOfLongestSubstringatIndex(i, s);
+            if (new_max > max) {max = new_max;}
+        }
+
+        return max;
+    }
+
+    // @pre i > 0 && i < s.length()
+    // @post returns length of max substring starting at index i
+    public int lengthOfLongestSubstringatIndex(int i, String s) {
+        HashSet<Character> temp = new HashSet<>();
+        int count = 0;
+        //The function creates a new hashset for each index i that is 'started' at
+        //The function then loads characters to the hashset as it progresses
+        //and once a character is repeated, it returns the count up to that point
+        while (i < s.length()) {
+            char new_char_max = s.charAt(i);
+            if (temp.contains(new_char_max)) {
+               return count;
+            }
+
+            else {
+                temp.add(new_char_max);
+                count++;
+            }
+
+            i++;
+        }
+
+        return count;
+    }
+}

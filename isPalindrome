@@ -1,0 +1,61 @@
+import java.util.Stack;
+class Solution {
+    public boolean isPalindrome(String s) {
+        int middle;
+        Stack<Character> stack = new Stack<>();
+
+        //The first block of code removes invalid characters from the string
+        //I make everything uppercase to avoid issues with A == a returning false
+
+        s = s.toUpperCase();
+        char[] arr = s.toCharArray();
+        String new_string = "";
+
+        for (int t = 0; t< s.length(); t++) {
+            char to_assess = arr[t];
+            if (to_assess < '0' || (to_assess > '9' && to_assess < 'A') || (to_assess  > 'Z')) {
+                continue;
+            }
+            else {
+                new_string += to_assess;
+            }
+        }
+
+        //Middle is the index *just before* we start popping from the stack
+        //So if a 4 character word, eg. 'noon' is placed, then middle = 1, the index of the 2nd character
+        //The following code checks if a (valid) string is a palindrome
+
+        if (new_string.length() % 2 == 0) {
+            //Let's keep in mind that length is one greater than the max index of the string
+            //So, in the even numbered case, we end up being 1 value too high
+            //In the odd numbered case, due to rounding down in integer division, the -1 adjustment is not necessary
+
+
+            middle = new_string.length() / 2 - 1;
+
+            for (int i = 0; i <= middle; i++) {
+                stack.push(new_string.charAt(i));
+            }
+        }
+        else {
+            
+            middle =  new_string.length() / 2;
+
+            for (int i = 0; i < middle; i++) {
+                stack.push(new_string.charAt(i));
+            }
+        }
+        
+        //Now we continue from the second half of the string and see if the top
+        //of the stack matches the new character. If it is a palindrome, it means
+        //that both halves must be symmetrical
+        for (int i = middle + 1; i < new_string.length(); i++) {
+            if (!stack.pop().equals(new_string.charAt(i))) {
+                return false;
+            }
+        }
+        
+        return true;
+
+    }
+}
