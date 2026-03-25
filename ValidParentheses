@@ -1,0 +1,51 @@
+import java.util.Stack;
+class Solution {
+    public boolean isValid(String s) {
+        Stack<Integer> st_1 = new Stack<>();
+        Stack<Integer> st_2 = new Stack<>();
+        Stack<Integer> st_3 = new Stack<>();
+
+        for (int i = 0; i < s.length(); i++) {
+            //push if left bracket found
+            if (s.charAt(i) == '(') {
+                st_1.push(i);
+
+            }
+            else if (s.charAt(i) == '{') {
+                st_2.push(i);
+
+            }
+            else if (s.charAt(i) == '[') {
+
+                st_3.push(i);
+            }
+
+            //pop if right bracket found
+            else if (s.charAt(i) == ')') {
+                if (st_1.isEmpty() || value_finder(st_2) > value_finder(st_1) || value_finder(st_3) > value_finder(st_1)) {return false;}
+                st_1.pop();
+            }
+            else if (s.charAt(i) == '}') {
+                if (st_2.isEmpty() || value_finder(st_3) > value_finder(st_2) || value_finder(st_1) > value_finder(st_2)) {return false;}
+                st_2.pop();
+            }
+            else if (s.charAt(i) == ']') {
+                if (st_3.isEmpty() || value_finder(st_1) > value_finder(st_3) || value_finder(st_2) > value_finder(st_3)) {return false;}
+                st_3.pop();
+            }
+            
+        }
+
+        if (st_1.isEmpty() && st_2.isEmpty() && st_3.isEmpty()) {
+            return true;
+        }
+
+
+        return false;
+    }
+
+    private int value_finder(Stack<Integer> stac) {
+        if (stac.isEmpty()) {return -1;}
+        return stac.peek();
+    }
+}
