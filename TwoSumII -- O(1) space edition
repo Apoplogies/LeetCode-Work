@@ -1,0 +1,40 @@
+class Solution {
+    public int[] twoSum(int[] numbers, int target) {
+        //We can only use O(1) space, so a hashmap is out
+
+        //Rather, we can use two pointers, the first pointer being at the min value
+        //And the second pointer at the max value.
+        //Whenever the sum of the top and bottom pointers is greater than the target
+        //that means that the max. value pointer is too high (since the minimum value cannot go lower, the max value  must go lower)
+        //Once it is low enough, we can start increasing the min value unti; it reachesthe correct point
+
+        //initiallise the starting ptr_values and answer array
+        int[] answer = new int[2];
+        int ptr_1 = 0;
+        int ptr_2 = numbers.length - 1;
+
+        //main while loop. Since an answer is guaranteed for the problem on leetcode, the loop condition is acceptable
+        while (numbers[ptr_1] + numbers[ptr_2] != target) {
+            int sum = numbers[ptr_1] + numbers[ptr_2];
+
+
+            if (sum > target) {
+                ptr_2--;
+            }
+
+            if (sum < target) {
+                ptr_1++;
+            }
+        }
+
+
+        answer[0] = ptr_1 + 1;
+        answer[1] = ptr_2 + 1;
+        return answer;
+
+    }
+
+        
+
+    
+}
