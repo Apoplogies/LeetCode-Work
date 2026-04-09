@@ -1,0 +1,70 @@
+class Solution {
+    public boolean checkInclusion(String s1, String s2) {
+        int ptr_1 = 0;
+        int ptr_2 = 0;
+        int length = s1.length();
+        int window_length = ptr_2 - ptr_1;
+        
+        int[] freq_arr = new int[26];
+        //First, we initialise a hashmap with Key (character) : Value (Number of times it appears in s1)
+        //One, instant check, remains static; it is a fixed reference that holds the original frequency
+        //The temp hashmap can be changed as needed
+        for (int i = 0; i < s1.length(); i++) {
+            int index = s1.charAt(i) - 'a';
+            freq_arr[index] = freq_arr[index] + 1;
+        }
+
+        //We can then check, for each 
+        int[] curr_freq = new int[26];
+        while (ptr_2 < s2.length() && window_length < length) {
+           
+            int index = s2.charAt(ptr_2) - 'a';
+            
+            if (freq_arr[index] == 0)  {
+                curr_freq = new int[26];
+                ptr_2++;
+                ptr_1 = ptr_2;
+            }
+                
+            else if (freq_arr[index] == curr_freq[index]) {
+                
+
+                if (ptr_1 == ptr_2) {
+                    ptr_1++;
+                    ptr_2++;
+                }
+
+                else {
+                    curr_freq[index] = curr_freq[index] + 1;
+
+                    //Instead of just restarting the count, let's adjust until we have removed the letter that occurs too much!
+                    int remove_index = s2.charAt(ptr_1) - 'a';
+                    ptr_1++;
+                    
+                    while (remove_index != index) {
+                        curr_freq[remove_index] = curr_freq[remove_index] - 1;
+                        remove_index = s2.charAt(ptr_1) - 'a';
+                        ptr_1++;
+                    }
+
+                    curr_freq[index] = curr_freq[index] - 1;
+                    ptr_2++;
+                    
+                    window_length = ptr_2 - ptr_1;
+                }
+
+               
+            }
+
+            else {
+                curr_freq[index] = curr_freq[index] + 1;
+                ptr_2++;
+                window_length = ptr_2 - ptr_1;
+            }
+
+
+        }
+        if (window_length == length) {return true;}
+        return false;
+    }
+}
