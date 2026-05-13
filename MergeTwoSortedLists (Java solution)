@@ -1,0 +1,79 @@
+# Intuition
+<!-- Describe your first thoughts on how to solve this problem. -->
+Iterate through each list, always taking the lowest value at any given point.
+# Approach
+<!-- Describe your approach to solving the problem. -->
+I simply ran a while loop until both lists had been fully iterated through.
+# Complexity
+- Time complexity:
+O(n) (where n is the total input size of both lists combined)
+
+# Code Java
+```java []
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        /**
+        *I create a listnode for the answer,
+        *and another listnode that points to the head of 
+        *the singly-linked list.
+        *This is because I iterate through the list 
+        *via answer = answer.next, so I need a pointer to the
+        *beginning of the list when I return the answer
+        */
+        ListNode answer = new ListNode();
+        ListNode ans = answer;
+
+        //
+        
+        while (!(list1 == null && list2 == null)) {
+            //If either list is finished, just add the remaining
+            //values from the other list
+            if (list1 == null) {
+                answer.next = new ListNode(list2.val);
+                list2 = list2.next;
+            }
+
+            else if (list2 == null) {
+                answer.next = new ListNode(list1.val);
+                list1 = list1.next;
+            }
+
+            else {
+
+                if (list2.val < list1.val) {
+                    answer.next = new ListNode(list2.val);
+                    list2 = list2.next;
+                }
+                else {
+                    answer.next = new ListNode(list1.val);
+                    list1 = list1.next;
+                }
+
+            }
+
+
+
+            answer = answer.next;
+            
+        }
+
+        return ans.next;
+        
+
+
+
+    }
+
+    
+}
+```
